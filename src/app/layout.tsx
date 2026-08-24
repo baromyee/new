@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
-import { koKR } from "@clerk/localizations";
 import "./globals.css";
 
 const notoSansKr = Noto_Sans_KR({
@@ -43,11 +42,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="ko" className={`${notoSansKr.variable} h-full`}>
       <body className={`${notoSansKr.className} min-h-full antialiased`}>
-        <ClerkProvider
-          localization={koKR}
-          afterSignOutUrl="/sign-in"
-          appearance={clerkAppearance}
-        >
+        <ClerkProvider afterSignOutUrl="/sign-in" appearance={clerkAppearance}>
           {children}
         </ClerkProvider>
       </body>

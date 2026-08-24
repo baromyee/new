@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BasketballIcon } from "@/components/AppHeader";
+import { BasketballIcon } from "@/components/BasketballIcon";
 
 export default function NotFound() {
   return (

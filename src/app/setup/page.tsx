@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { SetupForm } from "@/components/SetupForm";
-import { BasketballIcon } from "@/components/AppHeader";
+import { BasketballIcon } from "@/components/BasketballIcon";
 import { getOrCreateUser } from "@/lib/user";
 
 export const dynamic = "force-dynamic";

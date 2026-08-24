@@ -1,16 +1,6 @@
-import { Prisma } from "@prisma/client";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-
-const userInclude = {
-  team: {
-    include: {
-      players: { orderBy: { jerseyNumber: "asc" as const } },
-      games: { orderBy: { createdAt: "desc" as const } },
-    },
-  },
-} satisfies Prisma.UserInclude;
 
 export async function getOrCreateUser() {
   const { userId } = await auth();
@@ -22,7 +12,7 @@ export async function getOrCreateUser() {
     where: { clerkUserId: userId },
     create: { clerkUserId: userId },
     update: {},
-    include: userInclude,
+    include: { team: true },
   });
 }
 
@@ -31,5 +21,24 @@ export async function requireTeam() {
   if (!user.team) {
     redirect("/setup");
   }
-  return { user, team: user.team };
+
+  const [players, games] = await Promise.all([
+    prisma.player.findMany({
+      where: { teamId: user.team.id },
+      orderBy: { jerseyNumber: "asc" },
+    }),
+    prisma.game.findMany({
+      where: { teamId: user.team.id },
+      orderBy: { createdAt: "desc" },
+    }),
+  ]);
+
+  return {
+    user,
+    team: {
+      ...user.team,
+      players,
+      games,
+    },
+  };
 }

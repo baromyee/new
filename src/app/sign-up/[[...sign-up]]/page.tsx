@@ -1,5 +1,5 @@
 import { SignUp } from "@clerk/nextjs";
-import { BasketballIcon } from "@/components/AppHeader";
+import { BasketballIcon } from "@/components/BasketballIcon";
 
 export default function SignUpPage() {
   return (
