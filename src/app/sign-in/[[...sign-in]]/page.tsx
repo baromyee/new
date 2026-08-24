@@ -1,29 +1,7 @@
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
 import { SignIn } from "@clerk/nextjs";
 import { BasketballIcon } from "@/components/AppHeader";
 
-export const dynamic = "force-dynamic";
-
-export default async function SignInPage({
-  params,
-}: {
-  params: Promise<{ "sign-in"?: string[] }>;
-}) {
-  const segments = (await params)["sign-in"] ?? [];
-  const isCallback = segments.length > 0;
-
-  let userId: string | null = null;
-  try {
-    userId = (await auth()).userId;
-  } catch {
-    userId = null;
-  }
-
-  if (userId && !isCallback) {
-    redirect("/");
-  }
-
+export default function SignInPage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-4 py-12">
       <div className="mb-8 flex flex-col items-center text-center">

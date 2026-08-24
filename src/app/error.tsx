@@ -18,7 +18,7 @@ export default function ErrorPage({
     <div className="flex min-h-screen flex-col items-center justify-center px-4 text-center">
       <h1 className="text-2xl font-bold text-white">페이지를 불러오지 못했습니다</h1>
       <p className="mt-2 max-w-md text-zinc-300">
-        잠시 후 다시 시도하거나 로그인 화면으로 돌아가 주세요.
+        로그인 화면에서 다시 들어와 주세요. 같은 화면이 반복되면 잠시 후 다시 시도하세요.
       </p>
       <div className="mt-6 flex gap-3">
         <button

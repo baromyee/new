@@ -13,34 +13,17 @@ const userInclude = {
 } satisfies Prisma.UserInclude;
 
 export async function getOrCreateUser() {
-  let userId: string | null = null;
-  try {
-    const session = await auth();
-    userId = session.userId;
-  } catch {
-    redirect("/sign-in");
-  }
-
+  const { userId } = await auth();
   if (!userId) {
     redirect("/sign-in");
   }
 
-  try {
-    return await prisma.user.upsert({
-      where: { clerkUserId: userId },
-      create: { clerkUserId: userId },
-      update: {},
-      include: userInclude,
-    });
-  } catch (error) {
-    const existing = await prisma.user.findUnique({
-      where: { clerkUserId: userId },
-      include: userInclude,
-    });
-    if (existing) return existing;
-    console.error("getOrCreateUser failed", error);
-    throw error;
-  }
+  return prisma.user.upsert({
+    where: { clerkUserId: userId },
+    create: { clerkUserId: userId },
+    update: {},
+    include: userInclude,
+  });
 }
 
 export async function requireTeam() {
