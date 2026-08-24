@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { errorMessage } from "@/lib/errors";
+import { describeDatabaseTarget } from "@/lib/db-url";
 import { prisma } from "@/lib/prisma";
 
 export async function getOrCreateUser() {
@@ -27,7 +28,7 @@ export async function getOrCreateUser() {
     });
   } catch (error) {
     throw new Error(
-      `데이터베이스에 연결하지 못했습니다. Vercel DATABASE_URL이 Neon pooled 주소(-pooler 포함)인지 확인하세요. (${errorMessage(error)})`,
+      `데이터베이스 인증에 실패했습니다. Vercel DATABASE_URL을 Neon의 Pooled 연결 문자열로 다시 넣으세요. (${describeDatabaseTarget()}) (${errorMessage(error)})`,
     );
   }
 }
