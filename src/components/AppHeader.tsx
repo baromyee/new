@@ -46,7 +46,7 @@ export function AppHeader({
           <div className="ml-1 min-h-8 min-w-8">
             <ClerkLoaded>
               <SignedIn>
-                <UserButton afterSignOutUrl="/sign-in" />
+                <UserButton />
               </SignedIn>
             </ClerkLoaded>
           </div>
