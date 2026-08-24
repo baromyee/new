@@ -2,17 +2,20 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AppHeader } from "@/components/AppHeader";
 import { GameStatBoard } from "@/components/GameStatBoard";
+import { pageErrorFallback } from "@/components/LoadError";
 import { prisma } from "@/lib/prisma";
 import { pickCounts } from "@/lib/stats";
 import { requireTeam } from "@/lib/user";
 
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 export default async function GamePage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  try {
   const { id } = await params;
   const { team } = await requireTeam();
 
@@ -56,4 +59,7 @@ export default async function GamePage({
       </main>
     </div>
   );
+  } catch (error) {
+    return pageErrorFallback(error);
+  }
 }

@@ -1,11 +1,14 @@
 import { AppHeader } from "@/components/AppHeader";
+import { pageErrorFallback } from "@/components/LoadError";
 import { prisma } from "@/lib/prisma";
 import { averageStats, formatAvg, pickCounts } from "@/lib/stats";
 import { requireTeam } from "@/lib/user";
 
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 export default async function PlayersPage() {
+  try {
   const { team } = await requireTeam();
 
   const players = await prisma.player.findMany({
@@ -136,6 +139,9 @@ export default async function PlayersPage() {
       </main>
     </div>
   );
+  } catch (error) {
+    return pageErrorFallback(error);
+  }
 }
 
 function Stat({ label, value }: { label: string; value: string }) {

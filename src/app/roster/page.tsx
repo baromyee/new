@@ -1,10 +1,13 @@
 import { AppHeader } from "@/components/AppHeader";
+import { pageErrorFallback } from "@/components/LoadError";
 import { RosterForm } from "@/components/RosterForm";
 import { requireTeam } from "@/lib/user";
 
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 export default async function RosterPage() {
+  try {
   const { team } = await requireTeam();
 
   return (
@@ -21,4 +24,7 @@ export default async function RosterPage() {
       </main>
     </div>
   );
+  } catch (error) {
+    return pageErrorFallback(error);
+  }
 }

@@ -1,17 +1,20 @@
 import { redirect } from "next/navigation";
 import { SetupForm } from "@/components/SetupForm";
 import { BasketballIcon } from "@/components/BasketballIcon";
+import { pageErrorFallback } from "@/components/LoadError";
 import { getOrCreateUser } from "@/lib/user";
 
 export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 export default async function SetupPage() {
-  const user = await getOrCreateUser();
-  if (user.team) {
-    redirect("/");
-  }
+  try {
+    const user = await getOrCreateUser();
+    if (user.team) {
+      redirect("/");
+    }
 
-  return (
+    return (
     <div className="mx-auto flex min-h-screen max-w-2xl flex-col justify-center px-4 py-12">
       <div className="mb-8 text-center">
         <div className="mb-4 flex justify-center">
@@ -24,5 +27,8 @@ export default async function SetupPage() {
       </div>
       <SetupForm />
     </div>
-  );
+    );
+  } catch (error) {
+    return pageErrorFallback(error);
+  }
 }
