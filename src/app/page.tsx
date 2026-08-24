@@ -47,7 +47,7 @@ export default async function HomePage() {
                   <div>
                     <h3 className="text-lg font-semibold">{game.name}</h3>
                     <p className="mt-1 text-sm text-zinc-400">
-                      {game.createdAt.toLocaleDateString("ko-KR")}
+                      {new Date(game.createdAt).toLocaleDateString("ko-KR")}
                     </p>
                   </div>
                 </Link>

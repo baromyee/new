@@ -19,11 +19,23 @@ const clerkAppearance = {
   variables: {
     colorPrimary: "#f97316",
     colorBackground: "#161d2e",
-    colorText: "#f4f4f5",
-    colorTextSecondary: "#a1a1aa",
+    colorText: "#ffffff",
+    colorTextSecondary: "#ffffff",
     colorInputBackground: "#0b1020",
-    colorInputText: "#f4f4f5",
+    colorInputText: "#ffffff",
     borderRadius: "0.75rem",
+  },
+  elements: {
+    headerTitle: { color: "#ffffff" },
+    headerSubtitle: { color: "#ffffff" },
+    formFieldLabel: { color: "#ffffff" },
+    identityPreviewText: { color: "#ffffff" },
+    identityPreviewEditButton: { color: "#ffffff" },
+    socialButtonsBlockButton: { color: "#ffffff" },
+    socialButtonsBlockButtonText: { color: "#ffffff" },
+    footerAction: { display: "none" },
+    footerActionText: { display: "none" },
+    footerActionLink: { display: "none" },
   },
 };
 
