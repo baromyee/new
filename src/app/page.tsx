@@ -2,6 +2,7 @@ import Link from "next/link";
 import { AddGameForm } from "@/components/AddGameForm";
 import { AppHeader } from "@/components/AppHeader";
 import { BasketballIcon } from "@/components/BasketballIcon";
+import { ResetSession } from "@/components/ResetSession";
 import { requireTeam } from "@/lib/user";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 
@@ -68,6 +69,6 @@ export default async function HomePage() {
       throw error;
     }
     console.error("HomePage failed", error);
-    throw error;
+    return <ResetSession />;
   }
 }
