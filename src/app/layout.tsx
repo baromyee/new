@@ -13,8 +13,8 @@ const notoSansKr = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
-  title: "농구 선수 기록",
-  description: "경기별 농구 스탯을 기록하고 전 경기 평균을 확인하세요.",
+  title: "CourtBoard",
+  description: "농구 선수 스탯 관리. 쉽고, 간편하게",
 };
 
 const clerkAppearance = {
