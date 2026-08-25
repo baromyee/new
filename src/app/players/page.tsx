@@ -9,13 +9,13 @@ export const runtime = "nodejs";
 
 export default async function PlayersPage() {
   try {
-  const { team } = await requireTeam();
+    const { team } = await requireTeam();
 
-  const players = await prisma.player.findMany({
-    where: { teamId: team.id },
-    include: { stats: true },
-    orderBy: { jerseyNumber: "asc" },
-  });
+    const players = await prisma.player.findMany({
+      where: { teamId: team.id },
+      include: { stats: true },
+      orderBy: { jerseyNumber: "asc" },
+    });
 
   const rows = players.map((player) => {
     const avg = averageStats(player.stats.map(pickCounts));

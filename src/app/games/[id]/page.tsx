@@ -16,18 +16,33 @@ export default async function GamePage({
   params: Promise<{ id: string }>;
 }) {
   try {
-  const { id } = await params;
-  const { team } = await requireTeam();
+    const [{ id }, { team }] = await Promise.all([params, requireTeam()]);
 
-  const game = await prisma.game.findFirst({
-    where: { id, teamId: team.id },
-    include: {
-      stats: {
-        include: { player: true },
-        orderBy: { player: { jerseyNumber: "asc" } },
+    const game = await prisma.game.findFirst({
+      where: { id, teamId: team.id },
+      select: {
+        id: true,
+        name: true,
+        stats: {
+          select: {
+            id: true,
+            pts: true,
+            reb: true,
+            ast: true,
+            stl: true,
+            blk: true,
+            fgm: true,
+            fga: true,
+            tpm: true,
+            tpa: true,
+            ftm: true,
+            fta: true,
+            player: { select: { name: true, jerseyNumber: true } },
+          },
+          orderBy: { player: { jerseyNumber: "asc" } },
+        },
       },
-    },
-  });
+    });
 
   if (!game) {
     notFound();
@@ -46,7 +61,7 @@ export default async function GamePage({
       <main className="mx-auto max-w-7xl space-y-6 px-4 py-8">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <Link href="/" prefetch={false} className="text-sm text-orange-400 hover:underline">
+            <Link href="/" className="text-sm text-orange-400 hover:underline">
               ← 경기 목록
             </Link>
             <h1 className="mt-2 text-3xl font-bold">{game.name}</h1>

@@ -11,7 +11,6 @@ export function LoadError({ message }: { message: string }) {
       </p>
       <Link
         href="/"
-        prefetch={false}
         className="mt-6 rounded-xl bg-orange-500 px-5 py-2.5 font-semibold text-white hover:bg-orange-400"
       >
         다시 시도

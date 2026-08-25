@@ -19,7 +19,7 @@ export function AppHeader({
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3">
         <Link
           href="/"
-          prefetch={false}
+          prefetch
           className="flex min-w-0 items-center gap-2 font-bold text-orange-400"
         >
           <BasketballIcon className="h-8 w-8 shrink-0" />
@@ -31,21 +31,21 @@ export function AppHeader({
         <nav className="flex items-center gap-1">
           <Link
             href="/"
-            prefetch={false}
+            prefetch
             className={`${navClass} ${active === "games" ? "bg-orange-500/20 text-orange-300" : ""}`}
           >
             경기
           </Link>
           <Link
             href="/players"
-            prefetch={false}
+            prefetch
             className={`${navClass} ${active === "players" ? "bg-orange-500/20 text-orange-300" : ""}`}
           >
             선수 기록
           </Link>
           <Link
             href="/roster"
-            prefetch={false}
+            prefetch
             className={`${navClass} ${active === "roster" ? "bg-orange-500/20 text-orange-300" : ""}`}
           >
             선수 관리

@@ -3,6 +3,7 @@
 import { useClerk, useSession } from "@clerk/nextjs";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
+import { LoadingScreen, loadingMessageForPath } from "@/components/LoadingScreen";
 import {
   clearTabAuth,
   hasTabAuth,
@@ -21,6 +22,12 @@ export function StartAtLogin({ children }: { children: ReactNode }) {
   const router = useRouter();
   const authPage = isAuthPath(pathname);
   const [allowed, setAllowed] = useState(authPage);
+  const [goingToLogin, setGoingToLogin] = useState(false);
+
+  useEffect(() => {
+    if (authPage || allowed) return;
+    if (hasTabAuth()) setAllowed(true);
+  }, [allowed, authPage]);
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -32,10 +39,13 @@ export function StartAtLogin({ children }: { children: ReactNode }) {
       if (authPage) {
         if (isSignedIn && (hasTabAuth() || fresh)) {
           markTabAuthenticated();
+          setGoingToLogin(false);
+          setAllowed(true);
           router.replace("/");
           return;
         }
         if (isSignedIn) {
+          setGoingToLogin(true);
           clearTabAuth();
           try {
             await signOut({ redirectUrl: "/sign-in" });
@@ -44,11 +54,15 @@ export function StartAtLogin({ children }: { children: ReactNode }) {
           }
           return;
         }
-        if (!cancelled) setAllowed(true);
+        if (!cancelled) {
+          setGoingToLogin(false);
+          setAllowed(true);
+        }
         return;
       }
 
       if (!isSignedIn) {
+        setGoingToLogin(true);
         clearTabAuth();
         if (!cancelled) setAllowed(true);
         return;
@@ -56,10 +70,14 @@ export function StartAtLogin({ children }: { children: ReactNode }) {
 
       if (hasTabAuth() || fresh) {
         markTabAuthenticated();
-        if (!cancelled) setAllowed(true);
+        if (!cancelled) {
+          setGoingToLogin(false);
+          setAllowed(true);
+        }
         return;
       }
 
+      setGoingToLogin(true);
       clearTabAuth();
       try {
         await signOut({ redirectUrl: "/sign-in" });
@@ -75,11 +93,7 @@ export function StartAtLogin({ children }: { children: ReactNode }) {
   }, [authPage, isLoaded, isSignedIn, router, session?.createdAt, signOut]);
 
   if (!allowed) {
-    return (
-      <div className="flex min-h-screen items-center justify-center px-4 text-center">
-        <p className="text-sm text-zinc-400">로그인 화면으로 이동 중...</p>
-      </div>
-    );
+    return <LoadingScreen message={loadingMessageForPath(pathname, goingToLogin)} />;
   }
 
   return <>{children}</>;

@@ -1,10 +1,11 @@
+import { cache } from "react";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { errorMessage } from "@/lib/errors";
 import { describeDatabaseTarget } from "@/lib/db-url";
 import { prisma } from "@/lib/prisma";
 
-export async function getOrCreateUser() {
+export const getOrCreateUser = cache(async () => {
   let userId: string | null = null;
   try {
     const session = await auth();
@@ -22,7 +23,11 @@ export async function getOrCreateUser() {
   try {
     const existing = await prisma.user.findUnique({
       where: { clerkUserId: userId },
-      include: { team: true },
+      select: {
+        id: true,
+        clerkUserId: true,
+        team: { select: { id: true, name: true } },
+      },
     });
     if (existing) {
       return existing;
@@ -31,12 +36,20 @@ export async function getOrCreateUser() {
     try {
       return await prisma.user.create({
         data: { clerkUserId: userId },
-        include: { team: true },
+        select: {
+          id: true,
+          clerkUserId: true,
+          team: { select: { id: true, name: true } },
+        },
       });
     } catch {
       const raced = await prisma.user.findUnique({
         where: { clerkUserId: userId },
-        include: { team: true },
+        select: {
+          id: true,
+          clerkUserId: true,
+          team: { select: { id: true, name: true } },
+        },
       });
       if (raced) return raced;
       throw new Error("사용자 정보를 만들지 못했습니다.");
@@ -46,37 +59,13 @@ export async function getOrCreateUser() {
       `데이터베이스 인증에 실패했습니다. Vercel DATABASE_URL을 Neon의 Pooled 연결 문자열로 다시 넣으세요. (${describeDatabaseTarget()}) (${errorMessage(error)})`,
     );
   }
-}
+});
 
-export async function requireTeam() {
+export const requireTeam = cache(async () => {
   const user = await getOrCreateUser();
   if (!user.team) {
     redirect("/setup");
   }
 
-  try {
-    const [players, games] = await Promise.all([
-      prisma.player.findMany({
-        where: { teamId: user.team.id },
-        orderBy: { jerseyNumber: "asc" },
-      }),
-      prisma.game.findMany({
-        where: { teamId: user.team.id },
-        orderBy: { createdAt: "desc" },
-      }),
-    ]);
-
-    return {
-      user,
-      team: {
-        ...user.team,
-        players,
-        games,
-      },
-    };
-  } catch (error) {
-    throw new Error(
-      `팀 데이터를 불러오지 못했습니다. Neon 프로젝트가 일시 정지됐는지 확인하세요. (${errorMessage(error)})`,
-    );
-  }
-}
+  return { user, team: user.team };
+});
