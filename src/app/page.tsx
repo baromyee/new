@@ -25,6 +25,7 @@ export default async function HomePage() {
             </div>
             <Link
               href="/players"
+              prefetch={false}
               className="inline-flex items-center justify-center rounded-xl bg-white/10 px-4 py-2.5 text-sm font-semibold hover:bg-white/15"
             >
               선수 기록 보기
@@ -46,6 +47,7 @@ export default async function HomePage() {
                 <li key={game.id}>
                   <Link
                     href={`/games/${game.id}`}
+                    prefetch={false}
                     className="flex h-full flex-col gap-4 rounded-2xl border border-white/10 bg-[#161d2e] p-5 transition hover:border-orange-500/50 hover:bg-[#1c2540]"
                   >
                     <BasketballIcon className="h-12 w-12" />

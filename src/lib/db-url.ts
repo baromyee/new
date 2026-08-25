@@ -5,7 +5,7 @@ function readRawDatabaseUrl() {
     .replace(/^["']+|["']+$/g, "");
 }
 
-export function sanitizeDatabaseUrl(raw: string, onVercel = Boolean(process.env.VERCEL)) {
+export function sanitizeDatabaseUrl(raw: string) {
   const url = raw
     .trim()
     .replace(/\r?\n/g, "")
@@ -29,7 +29,7 @@ export function sanitizeDatabaseUrl(raw: string, onVercel = Boolean(process.env.
 
   for (const key of [...params.keys()]) {
     const lower = key.toLowerCase();
-    if (lower === "channel_binding" || lower === "pgbouncer" || lower === "connection_limit") {
+    if (lower === "channel_binding" || lower === "pgbouncer" || lower === "connection_limit" || lower === "statement_cache_size") {
       params.delete(key);
     }
   }
@@ -39,11 +39,9 @@ export function sanitizeDatabaseUrl(raw: string, onVercel = Boolean(process.env.
   }
   if (base.includes("-pooler")) {
     params.set("pgbouncer", "true");
+    params.set("statement_cache_size", "0");
   }
   params.set("connect_timeout", "30");
-  if (onVercel) {
-    params.set("connection_limit", "1");
-  }
 
   return `${base}?${params.toString()}`;
 }

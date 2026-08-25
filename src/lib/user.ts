@@ -20,12 +20,27 @@ export async function getOrCreateUser() {
   }
 
   try {
-    return await prisma.user.upsert({
+    const existing = await prisma.user.findUnique({
       where: { clerkUserId: userId },
-      create: { clerkUserId: userId },
-      update: {},
       include: { team: true },
     });
+    if (existing) {
+      return existing;
+    }
+
+    try {
+      return await prisma.user.create({
+        data: { clerkUserId: userId },
+        include: { team: true },
+      });
+    } catch {
+      const raced = await prisma.user.findUnique({
+        where: { clerkUserId: userId },
+        include: { team: true },
+      });
+      if (raced) return raced;
+      throw new Error("사용자 정보를 만들지 못했습니다.");
+    }
   } catch (error) {
     throw new Error(
       `데이터베이스 인증에 실패했습니다. Vercel DATABASE_URL을 Neon의 Pooled 연결 문자열로 다시 넣으세요. (${describeDatabaseTarget()}) (${errorMessage(error)})`,

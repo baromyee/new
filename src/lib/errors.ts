@@ -1,4 +1,10 @@
+import { isRedirectError } from "next/dist/client/components/redirect-error";
+import { isHTTPAccessFallbackError } from "next/dist/client/components/http-access-fallback/http-access-fallback";
+
 export function isNavigationError(error: unknown) {
+  if (isRedirectError(error) || isHTTPAccessFallbackError(error)) {
+    return true;
+  }
   if (typeof error !== "object" || error === null) return false;
   const digest =
     "digest" in error && typeof error.digest === "string" ? error.digest : "";
@@ -6,8 +12,9 @@ export function isNavigationError(error: unknown) {
   return (
     digest.includes("NEXT_REDIRECT") ||
     digest.includes("NEXT_NOT_FOUND") ||
-    message === "NEXT_REDIRECT" ||
-    message === "NEXT_NOT_FOUND"
+    digest.includes("NEXT_HTTP_ERROR") ||
+    message.includes("NEXT_REDIRECT") ||
+    message.includes("NEXT_NOT_FOUND")
   );
 }
 

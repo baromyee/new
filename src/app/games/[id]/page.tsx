@@ -46,7 +46,7 @@ export default async function GamePage({
       <main className="mx-auto max-w-7xl space-y-6 px-4 py-8">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <Link href="/" className="text-sm text-orange-400 hover:underline">
+            <Link href="/" prefetch={false} className="text-sm text-orange-400 hover:underline">
               ← 경기 목록
             </Link>
             <h1 className="mt-2 text-3xl font-bold">{game.name}</h1>
