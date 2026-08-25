@@ -8,7 +8,7 @@ export default function SignInPage() {
         <BasketballIcon className="mb-4 h-14 w-14" />
         <h1 className="text-3xl font-bold tracking-tight text-white">농구 선수 기록</h1>
         <p className="mt-2 max-w-sm text-white">
-          Google 계정으로 로그인하면 팀, 선수, 경기 기록이 저장되고 다시 들어와도 그대로 나타납니다.
+          시작할 때마다 Google 로그인이 필요합니다. 팀과 경기 기록은 계정에 저장됩니다.
         </p>
       </div>
       <SignIn

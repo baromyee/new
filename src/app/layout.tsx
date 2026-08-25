@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import { AppClerkProvider } from "@/components/AppClerkProvider";
+import { StartAtLogin } from "@/components/StartAtLogin";
 import "./globals.css";
 
 const notoSansKr = Noto_Sans_KR({
@@ -42,7 +43,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="ko" className={`${notoSansKr.variable} h-full`}>
       <body className={`${notoSansKr.className} min-h-full antialiased`}>
-        <AppClerkProvider appearance={clerkAppearance}>{children}</AppClerkProvider>
+        <AppClerkProvider appearance={clerkAppearance}>
+          <StartAtLogin>{children}</StartAtLogin>
+        </AppClerkProvider>
       </body>
     </html>
   );

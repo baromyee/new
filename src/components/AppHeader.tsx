@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { BasketballIcon } from "@/components/BasketballIcon";
-import { ClerkUserMenu } from "@/components/ClerkUserMenu";
+import { LogoutButton } from "@/components/LogoutButton";
 
 const navClass =
   "rounded-full px-3 py-1.5 text-sm font-medium text-zinc-300 transition hover:bg-white/10 hover:text-white";
@@ -50,9 +50,7 @@ export function AppHeader({
           >
             선수 관리
           </Link>
-          <div className="ml-1 min-h-8 min-w-8">
-            <ClerkUserMenu />
-          </div>
+          <LogoutButton />
         </nav>
       </div>
     </header>
